@@ -22,5 +22,7 @@ export default theme => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+        minHeight: '80px'
+    },
 });

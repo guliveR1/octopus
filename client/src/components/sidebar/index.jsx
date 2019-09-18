@@ -9,9 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import routes from './data/routes';
+import routes from '../../router/routes';
 import style from './style';
 import logo from '../../assets/octopus.png';
+import {Link} from "react-router-dom";
 
 export default function ClippedDrawer(props) {
     const classes = makeStyles(style)();
@@ -22,8 +23,8 @@ export default function ClippedDrawer(props) {
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <img src={logo} alt="logo" width="35" className={classes.logo} />
-                    <Typography variant="h6" noWrap>
-                        Octopus
+                    <Typography variant="h5" noWrap>
+                        <b>Octopus</b> - Salt Stack Management System
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -37,7 +38,7 @@ export default function ClippedDrawer(props) {
                 <div className={classes.toolbar} />
                 <List>
                     {routes.map((route) => (
-                        <ListItem button key={route.title}>
+                        <ListItem button key={route.title} component={Link} to={route.path}>
                             <ListItemIcon>{route.icon}</ListItemIcon>
                             <ListItemText primary={route.title} />
                         </ListItem>
