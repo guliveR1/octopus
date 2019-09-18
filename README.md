@@ -1,3 +1,3 @@
-# octopus
+# Octopus
 
 Currently only supporting ubuntu!!!!
