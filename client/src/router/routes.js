@@ -1,4 +1,4 @@
-import {Home as HomeIcon} from '@material-ui/icons';
+import {Build as BuildIcon, List as ListIcon} from '@material-ui/icons';
 import React from 'react';
 import Minions from '../components/minions';
 import GeneralStatus from "../components/general-status";
@@ -7,13 +7,13 @@ const routes = [
     {
         title: "General Status",
         path: "/general-status",
-        icon: <HomeIcon />,
+        icon: <BuildIcon />,
         component: GeneralStatus
     },
     {
         title: "Minions",
         path: "/minions",
-        icon: <HomeIcon />,
+        icon: <ListIcon />,
         component: Minions
     }
 ];

@@ -26,7 +26,7 @@ function initializeServer(app) {
     }
 }
 
-if (argv.master) {
+if (argv.masterHost) {
     const app = express();
 
     initializeMiddleWares(app);

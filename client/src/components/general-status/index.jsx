@@ -11,9 +11,9 @@ class GeneralStatus extends React.Component {
 
     loadGeneralStatus() {
         getGeneralStatus().then((response) => {
-            setTimeout(() => this.setState({...response.data, loaded: true}), 2000);
+            this.setState({...response.data, loaded: true});
         }).catch((error) => {
-            setTimeout(() => this.setState({error: error, loaded: true}), 2000);
+            this.setState({error: error, loaded: true});
         });
     }
 
