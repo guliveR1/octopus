@@ -3,7 +3,7 @@ export default theme => ({
         display: 'flex',
     },
     logo: {
-      marginRight: '15px',
+        marginRight: '15px',
         marginTop: '10px',
         marginBottom: '10px'
     },
@@ -23,6 +23,6 @@ export default theme => ({
         padding: theme.spacing(3),
     },
     toolbar: {
-        minHeight: '80px'
-    },
+        minHeight: '75px'
+    }
 });
