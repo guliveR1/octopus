@@ -13,6 +13,7 @@ const getGeneralStatus = async (req, res) => {
             numOfStates: 13
         });
     } catch (ex) {
+        console.error(ex);
         res.status(500).send(strings.error);
     }
 };

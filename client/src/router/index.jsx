@@ -13,7 +13,7 @@ function AppRouter() {
                     )
                 }
 
-                <Route path='/' render={() => (<Redirect to={routes[0].path} />)} />
+                <Route exact path='/' render={() => (<Redirect to={routes[0].path} />)} />
             </Sidebar>
         </Router>
     );

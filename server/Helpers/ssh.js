@@ -9,7 +9,11 @@ const runCommand = async (host, username, password, command) => {
         password
     });
 
-    return ssh.execCommand(command);
+    const result = ssh.execCommand(command);
+
+    ssh.dispose();
+
+    return result;
 };
 
 module.exports = {
