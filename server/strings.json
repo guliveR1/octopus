@@ -1,3 +1,5 @@
 {
-  "error": "An error has occured."
+  "error": "An error has occured.",
+  "ssh_error": "Couldn't connect to the host.",
+  "minion_error": "Minion did not return."
 }

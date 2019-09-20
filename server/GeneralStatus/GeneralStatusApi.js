@@ -9,7 +9,7 @@ const getGeneralStatus = async (req, res) => {
         res.status(200).json({
             master: argv.masterHost,
             masterAlive: await generalStatusBl.getMasterStatus(),
-            numOfMinions: 23,
+            numOfMinions: await generalStatusBl.getNumOfMinions(),
             numOfStates: 13
         });
     } catch (ex) {

@@ -3,6 +3,7 @@ const argv = require('yargs').argv;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const GeneralStatusApi = require('./GeneralStatus/GeneralStatusApi');
+const MinionApi = require('./Minion/MinionApi');
 
 function initializeMiddleWares(app) {
     // Initialize body parser
@@ -14,6 +15,7 @@ function initializeMiddleWares(app) {
 
     // Use routes
     app.use('/general-status', GeneralStatusApi);
+    app.use('/minions', MinionApi);
 }
 
 function initializeServer(app) {
