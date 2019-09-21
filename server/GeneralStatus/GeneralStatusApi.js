@@ -6,12 +6,9 @@ const generalStatusBl = require('./GeneralStatusBl');
 
 const getGeneralStatus = async (req, res) => {
     try {
-        res.status(200).json({
-            master: argv.masterHost,
-            masterAlive: await generalStatusBl.getMasterStatus(),
-            numOfMinions: await generalStatusBl.getNumOfMinions(),
-            numOfStates: 13
-        });
+        const status = await generalStatusBl.getGeneralStatus();
+
+        res.status(200).json(status);
     } catch (ex) {
         console.error(ex);
         res.status(500).send(strings.error);

@@ -1,6 +1,7 @@
-import {Build as BuildIcon, List as ListIcon, DirectionsRun as JobsIcon, InsertDriveFile as StatesIcon} from '@material-ui/icons';
+import {Build as BuildIcon, List as ListIcon, InsertDriveFile as StatesIcon} from '@material-ui/icons';
 import React from 'react';
 import Minions from '../components/minions';
+import States from '../components/states';
 import GeneralStatus from "../components/general-status";
 
 const routes = [
@@ -20,13 +21,7 @@ const routes = [
         title: "States",
         path: "/states",
         icon: <StatesIcon />,
-        component: Minions
-    },
-    {
-        title: "Jobs",
-        path: "/jobs",
-        icon: <JobsIcon />,
-        component: Minions
+        component: States
     }
 ];
 

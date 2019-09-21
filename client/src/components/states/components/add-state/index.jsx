@@ -12,9 +12,9 @@ import {
     withStyles
 } from '@material-ui/core';
 import style from './style';
-import {addMinion, restartMinion} from '../../services/minion.service';
+import {addState} from '../../services/state.service';
 
-class AddMinionDialog extends React.Component {
+class AddStateDialog extends React.Component {
     constructor(props) {
         super(props);
 
@@ -22,14 +22,17 @@ class AddMinionDialog extends React.Component {
             open: props.open,
             adding: false,
             snackBar: {},
-            hostname: '',
-            username: '',
-            password: ''
+            name: '',
+            initFile: ''
         };
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        this.setState({open: nextProps.open});
+        this.setState({
+            open: nextProps.open,
+            name: nextProps.name,
+            initFile: nextProps.initFile
+        });
     }
 
     handleClose() {
@@ -65,63 +68,58 @@ class AddMinionDialog extends React.Component {
     }
 
     async handleAdd() {
-        const restart = this.props.restart;
+        const edit = this.props.edit;
 
-        this.showSnackbar(restart ? 'Restarting minion, please wait...' : 'Adding minion, please wait...');
+        this.showSnackbar((edit ? 'Editing' : 'Adding') + ' state, please wait...');
 
         try {
             this.setState({adding: true});
-
-            if (restart) await restartMinion(this.state.hostname, this.state.username, this.state.password);
-            else await addMinion(this.state.hostname, this.state.username, this.state.password);
-            this.showSnackbar(restart ? 'Minion restarted successfully!' : 'Minion added successfully!');
+            await addState(this.state.name, this.state.initFile);
+            this.showSnackbar('State ' + (edit ? 'edited' : 'added') + ' successfully!');
             this.setState({adding: false}, this.handleClose.bind(this));
             this.props.onAdd();
         } catch(ex) {
             this.setState({adding: false});
-            this.showSnackbar('There was an error ' + (restart ? 'restarting' : 'adding') + ' this minion, please contact the site administrator.');
+            this.showSnackbar('There was an error ' + (edit ? 'editing' : 'adding') + ' this state, please contact the site administrator.');
         } finally {
             setTimeout(this.hideSnackbar.bind(this), 3000);
         }
     }
 
     render() {
-        const {open, snackBar, adding} = this.state;
-        const {classes, restart} = this.props;
+        const {open, snackBar, adding, name, initFile} = this.state;
+        const {classes, edit} = this.props;
 
         return (
             <div>
                 <Dialog open={open} onBackdropClick={this.handleClose.bind(this)}>
-                    <DialogTitle>{restart ? 'Restart Existing Minion' : 'Add New Minion'}</DialogTitle>
+                    <DialogTitle>{edit ? 'Edit init.sls' : 'Add New State'}</DialogTitle>
                     <Divider />
                     <DialogContent className={classes.dialogContent}>
                         <DialogContentText>
-                            {restart ? 'Please re-enter the details of the minion\'s server:' : 'Please enter the details of the server you want to configure as minions:'}
+                            {edit ? '' : 'Please enter the details of the salt state you wish to add:'}
                         </DialogContentText>
                         <TextField
                             variant="outlined"
-                            label="Hostname"
-                            id="hostname"
+                            label="Unique Name:"
+                            id="name"
                             onChange={this.handleChange.bind(this)}
+                            value={name || ''}
+                            disabled={edit}
                             type="text"
                             className={classes.textField}
                             fullWidth
                         />
                         <TextField
                             variant="outlined"
-                            label="Username"
-                            id="username"
+                            label="Initialization File (init.sls):"
+                            id="initFile"
+                            value={initFile || ''}
                             onChange={this.handleChange.bind(this)}
                             type="text"
-                            className={classes.textField}
-                            fullWidth
-                        />
-                        <TextField
-                            variant="outlined"
-                            label="Password"
-                            id="password"
-                            onChange={this.handleChange.bind(this)}
-                            type="password"
+                            multiline
+                            rows="10"
+                            helperText="Should be in yaml format!"
                             className={classes.textField}
                             fullWidth
                         />
@@ -132,7 +130,7 @@ class AddMinionDialog extends React.Component {
                             Cancel
                         </Button>
                         <Button disabled={adding} onClick={this.handleAdd.bind(this)} color="primary">
-                            {restart ? 'Restart' : 'Add'}
+                            {edit ? 'Edit' : 'Add'}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -145,4 +143,4 @@ class AddMinionDialog extends React.Component {
     }
 }
 
-export default withStyles(style)(AddMinionDialog);
+export default withStyles(style)(AddStateDialog);

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const GeneralStatusApi = require('./GeneralStatus/GeneralStatusApi');
 const MinionApi = require('./Minion/MinionApi');
+const StateApi = require('./State/StateApi');
 
 function initializeMiddleWares(app) {
     // Initialize body parser
@@ -16,6 +17,7 @@ function initializeMiddleWares(app) {
     // Use routes
     app.use('/general-status', GeneralStatusApi);
     app.use('/minions', MinionApi);
+    app.use('/states', StateApi);
 }
 
 function initializeServer(app) {

@@ -45,7 +45,7 @@ const createConnection = async (host, username, password) => {
 const runCommand = (ssh, command) => {
     return new Promise((resolve, reject) => {
         ssh.execCommand(command).then(result => {
-            if (result.stderr && !result.stderr.includes('WARNING')) reject(result.stderr);
+            if (result.stderr && !result.stderr.includes('WARNING')) reject({error: result.stderr, additional_info: result.stdout});
             else resolve(result.stdout);
         });
     });

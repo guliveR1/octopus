@@ -30,7 +30,23 @@ const addMinion = async (req, res) => {
     }
 };
 
+const restartMinion = async (req, res) => {
+    const minionHost = req.body.minionHost;
+    const minionUsername = req.body.minionUsername;
+    const minionPassword = req.body.minionPassword;
+
+    try {
+        await minionBl.restartMinion(minionHost, minionUsername, minionPassword);
+
+        res.status(200).json('success');
+    } catch (ex) {
+        console.error(ex);
+        res.status(500).send(ex === strings.ssh_error ? strings.ssh_error : strings.error);
+    }
+};
+
 router.get('/', getMinions);
 router.post('/', addMinion);
+router.post('/restart', restartMinion);
 
 module.exports = router;

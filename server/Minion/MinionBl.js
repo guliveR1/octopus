@@ -4,18 +4,26 @@ const strings = require('../strings');
 const argv = require('yargs').argv;
 
 const getMinions = async() => {
-    const masterSsh = await masterDal.createMasterConnection(argv.masterHost, argv.masterUsername, argv.masterPassword);
-    const hosts = (await masterDal.pingMinions(masterSsh)).split('\n');
-    const minions = [];
+    let masterSsh;
 
-    for (let index = 0; index < hosts.length; index += 2) {
-        minions.push({
-            hostname: hosts[index].substr(0, hosts[index].length - 1),
-            ping: hosts[index + 1].includes('True')
-        });
+    try {
+        masterSsh = await masterDal.createMasterConnection(argv.masterHost, argv.masterUsername, argv.masterPassword);
+        const hosts = (await masterDal.pingMinions(masterSsh)).split('\n');
+        const minions = [];
+
+        for (let index = 0; index < hosts.length; index += 2) {
+            minions.push({
+                hostname: hosts[index].substr(0, hosts[index].length - 1),
+                ping: hosts[index + 1].includes('True')
+            });
+        }
+
+        return minions;
+    } catch(ex) {
+        throw ex;
+    } finally {
+        if (masterSsh) masterSsh.dispose();
     }
-
-    return minions;
 };
 
 const addMinion = async (host, username, password) => {
@@ -48,7 +56,22 @@ const addMinion = async (host, username, password) => {
     }
 };
 
+const restartMinion = async (host, username, password) => {
+    let ssh;
+
+    try {
+        ssh = await minionDal.createMinionConnection(host, username, password);
+
+        await minionDal.restartMinion(ssh);
+    } catch (ex) {
+        throw ex;
+    } finally {
+        if (ssh) ssh.dispose();
+    }
+};
+
 module.exports = {
     addMinion,
-    getMinions
+    getMinions,
+    restartMinion
 };

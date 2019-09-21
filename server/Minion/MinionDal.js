@@ -5,7 +5,8 @@ const createMinionConnection = async (host, username, password) => {
 };
 
 const installSalt = async (ssh) => {
-    let result = await sshHelper.runCommand(ssh, 'echo "deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main" | sudo tee /etc/apt/sources.list.d/saltstack.list');
+    let result = await sshHelper.runCommand(ssh, 'wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add -');
+    result = await sshHelper.runCommand(ssh, 'echo "deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main" | sudo tee /etc/apt/sources.list.d/saltstack.list');
     result = await sshHelper.runCommand(ssh, 'sudo apt -y install salt-minion');
 
     return result;
@@ -23,9 +24,14 @@ const getMinionHostname = async (ssh) => {
     return await sshHelper.runCommand(ssh, 'hostname');
 };
 
+const restartMinion = async (ssh) => {
+    return await sshHelper.runCommand(ssh, 'sudo service salt-minion restart');
+};
+
 module.exports = {
     createMinionConnection,
     installSalt,
     setMaster,
-    getMinionHostname
+    getMinionHostname,
+    restartMinion
 };

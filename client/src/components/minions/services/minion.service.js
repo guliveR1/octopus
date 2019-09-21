@@ -12,3 +12,11 @@ export const addMinion = (hostname, username, password) => {
         minionPassword: password
     });
 };
+
+export const restartMinion = (hostname, username, password) => {
+    return axios.post(`${config.apiUrl}/minions/restart`, {
+        minionHost: hostname,
+        minionUsername: username,
+        minionPassword: password
+    });
+};

@@ -1,23 +1,25 @@
 const ssh = require('../Helpers/ssh');
 const argv = require('yargs').argv;
-const generalStatusDal = require('./GeneralStatusDal');
+const masterDal = require('../Master/MasterDal');
 const minionBl = require('../Minion/MinionBl');
 
-const getMasterStatus = async () => {
-    const result = await generalStatusDal.getMasterStatus(
+const getGeneralStatus = async () => {
+    const status = {};
+
+    const ssh = await masterDal.createMasterConnection(
         argv.masterHost,
         argv.masterUsername,
         argv.masterPassword
     );
 
-    return result.stdout.length > 0;
-};
+    status.master = argv.masterHost;
+    status.masterAlive = (await masterDal.getMasterStatus(ssh)).length > 0;
+    status.numOfMinions = (await masterDal.getAcceptedKeys(ssh)).split('\n').length - 1;
+    status.numOfStates = 22;
 
-const getNumOfMinions = async () => {
-    return (await minionBl.getMinions()).length;
+    return status;
 };
 
 module.exports = {
-    getMasterStatus,
-    getNumOfMinions
+    getGeneralStatus
 };
