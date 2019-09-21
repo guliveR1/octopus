@@ -1,14 +1,12 @@
 import React from 'react';
 import {
     Button,
-    TextField,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
     DialogContentText,
     Divider,
-    Snackbar,
     ListItem,
     ListItemText,
     ListItemIcon,
@@ -108,6 +106,9 @@ class ApplyStateDialog extends React.Component {
                         }
                         {
                             error ? 'An error occured while fetching minions, please try again or contact the site administrator.' : ''
+                        }
+                        {
+                            applyError ? 'An error occured while applying state, please try again or contact the site administrator.' : ''
                         }
                         {
                             !applying && minions ? <><DialogContentText>

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-sudo su
 sudo apt -y update
 wget -O - https://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add -
 echo "deb http://repo.saltstack.com/apt/ubuntu/18.04/amd64/latest bionic main" | sudo tee /etc/apt/sources.list.d/saltstack.list
@@ -35,5 +34,24 @@ SyslogIdentifier=octopus-server
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/octopus-server.service
+sudo systemctl enable octopus-server.service
+sudo systemctl start octopus-server.service
+sudo apt -y install nginx
+sudo echo "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root $currDir/octopus/client/build;
+
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
+
+        location / {
+                try_files $uri /index.html;
+        }
+}" > /etc/nginx/sites-available/default
+sudo service nginx restart
+
 
 
