@@ -8,7 +8,17 @@ const getMinions = async() => {
 
     try {
         masterSsh = await masterDal.createMasterConnection(argv.masterHost, argv.masterUsername, argv.masterPassword);
-        const hosts = (await masterDal.pingMinions(masterSsh)).split('\n');
+        let hosts;
+		
+		try {
+			hosts = (await masterDal.pingMinions(masterSsh)).split('\n');
+		} catch (ex) {
+			if (ex.error === 'ERROR: Minions returned with non-zero exit code') {
+				hosts = ex.additional_info.split('\n');
+			} else {
+				throw ex;
+			}
+		}
         const minions = [];
 
         for (let index = 0; index < hosts.length; index += 2) {
